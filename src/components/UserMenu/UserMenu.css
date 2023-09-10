@@ -1,0 +1,16 @@
+.UserMenu {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0;
+  background-color: antiquewhite;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+.UserMenu button {
+  width: 100px;
+  border-radius: 5px;
+}

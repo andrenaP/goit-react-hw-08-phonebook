@@ -3,22 +3,21 @@ import './ContactList.css';
 import { useSelector } from 'react-redux';
 import ContactItem from 'components/ContactItem/ContactItem';
 
-import { getfilterValue } from 'redux/filterSlice';
-import { useFetchContactsQuery } from 'redux/contact';
-import { getVisibleContacts } from 'redux/contact-selector';
+import { getVisibleContacts } from 'redux/contact/contact-selector';
+
+import { selectContactsList } from 'redux/contact/selectors';
+
+import { getfilterValue } from 'redux/contact/filterSlice';
 
 const ContactList = () => {
-  const { data, isFetching, error } = useFetchContactsQuery();
-
+  const contacts = useSelector(selectContactsList);
   const filter = useSelector(getfilterValue);
-  const visibleContacts = getVisibleContacts({ filter, data });
+  const visibleContacts = getVisibleContacts({ filter, contacts });
+
   return (
     <>
-      {isFetching ? 'Loading...' : 'Contacts table'}
       <ul className="ListOfNames">
-        {error}
-
-        {data && (
+        {visibleContacts && (
           <>
             {visibleContacts.length === 0 && 'Nothing found'}
             {visibleContacts.map(contacts => {

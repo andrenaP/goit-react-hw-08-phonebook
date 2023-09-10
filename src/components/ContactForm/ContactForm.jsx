@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import './ContactForm.css';
 import ContactAnyInput from '../ContactAnyInput';
+import { Notify } from 'notiflix';
+import { Button } from '@chakra-ui/react';
 
-import { useAddContactMutation, useFetchContactsQuery } from 'redux/contact';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectContactsList } from 'redux/contact/selectors';
+import { addContact } from 'redux/contact/operations';
 
 export default function ContactForm() {
-  const { data } = useFetchContactsQuery();
-  const contacts = data;
-  const [createContact] = useAddContactMutation();
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContactsList);
 
   const [name, setname] = useState('');
   const [number, setnumber] = useState('');
@@ -18,7 +21,7 @@ export default function ContactForm() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    onSubmit({ name: name, phone: number });
+    onSubmit({ name: name, number: number.toString() });
     reset();
     event.target.reset();
   };
@@ -36,7 +39,17 @@ export default function ContactForm() {
         return 0;
       }
     }
-    createContact(contactData);
+
+    dispatch(addContact(contactData))
+      .unwrap()
+      .then(originalPromiseResult => {
+        Notify.success(
+          `${originalPromiseResult.name} successfully added to contacts`
+        );
+      })
+      .catch(() => {
+        Notify.failure("Sorry, something's wrong");
+      });
   };
 
   const reset = () => {
@@ -63,7 +76,7 @@ export default function ContactForm() {
         handleChange={event => handleChange(event, setnumber)}
       />
 
-      <button type="submit">Add contact</button>
+      <Button type="submit">Add contact</Button>
     </form>
   );
 }

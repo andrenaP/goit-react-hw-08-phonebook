@@ -1,21 +1,32 @@
 import ContactAnyInput from 'components/ContactAnyInput';
-import { useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import { logIn } from 'redux/auth/operations';
+import { Notify } from 'notiflix';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
-  const [login, setlogin] = useState('');
-  const [password, setpassword] = useState('');
+  const dispatch = useDispatch();
 
   const handleSubmit = event => {
     event.preventDefault();
-    reset();
-    console.log({ login: login, password: password });
-  };
-  const handleChange = (event, SetFunction) => {
-    SetFunction(event.target.value);
-  };
-  const reset = () => {
-    setlogin('');
-    setpassword('');
+    const form = event.currentTarget;
+
+    dispatch(
+      logIn({
+        email: form.elements.email.value,
+        password: form.elements.password.value,
+      })
+    )
+      .unwrap()
+      .then(originalPromiseResult => {
+        Notify.success(`${originalPromiseResult.user.name} welcome back!`);
+      })
+      .catch(Error => {
+        Notify.failure('Incorrect login or password');
+        console.log(Error);
+      });
+
+    form.reset();
   };
 
   return (
@@ -23,22 +34,19 @@ const Login = () => {
       <h2>Login page</h2>
       <form action="" className="MainForm" onSubmit={handleSubmit}>
         <ContactAnyInput
-          LableText="login"
-          type="text"
-          name="login"
+          LableText="email"
+          type="email"
+          name="email"
           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          title="login"
-          handleChange={event => handleChange(event, setlogin)}
+          title="email"
         />
         <ContactAnyInput
           LableText="password"
           type="password"
           name="password"
-          //   pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="password"
-          handleChange={event => handleChange(event, setpassword)}
         />
-        <button type="submit">Add contact</button>
+        <Button type="submit">Login</Button>
       </form>
     </>
   );

@@ -1,7 +1,7 @@
-export const getVisibleContacts = ({ data, filter }) => {
+export const getVisibleContacts = ({ contacts, filter }) => {
   const normalizedFilter = filter.toLowerCase();
-  if (data) {
-    return data.filter(contact =>
+  if (contacts) {
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   }
