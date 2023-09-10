@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/38.fbf4f6b4.chunk.css","mappings":"AAAA,sBACE,YAAa,CAEb,qBAAsB,CADtB,OAAQ,CAER,WACF","sources":["components/ContactAnyInput/ContactAnyInput.css"],"sourcesContent":[".ContactAnyInputLabel {\n  display: flex;\n  gap: 5px;\n  flex-direction: column;\n  width: 200px;\n}\n"],"names":[],"sourceRoot":""}
